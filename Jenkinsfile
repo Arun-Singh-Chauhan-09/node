@@ -26,9 +26,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 // Run SSH commands directly
-                 {
                     sh '''
-                        ssh ubuntu@172.31.49.97 <<EOF
+                        ssh -i ubuntu@172.31.49.97 <<EOF
                         cd /home/ubuntu/myapp/node
                         git pull origin main
                         npm install
