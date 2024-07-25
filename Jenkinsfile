@@ -26,7 +26,7 @@ pipeline {
         stage('Test') {
             when {
                 expression {
-                    return fileExists('package.json') && sh(script: 'npm run | grep -q " test"', returnStatus: true) == 0
+                    return fileExists('package.json') && sh(script: 'npm run', returnStdout: true).contains(' test')
                 }
             }
             steps {
