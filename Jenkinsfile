@@ -25,16 +25,18 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                // Use SSH to deploy
-                sh '''
-                    ssh -tt -o StrictHostKeyChecking=no ubuntu@172.31.49.97 <<EOF
-                    cd /home/ubuntu/myapp/node
-                    git pull origin main
-                    npm install
-                    pm2 restart all
-                    exit
-                    EOF
-                '''
+                // Use SSH to deploy with the specified key
+                withCredentials([sshUserPrivateKey(credentialsId: 'node-server-ssh-key', keyFileVariable: 'SSH_KEY')]) {
+                    sh '''
+                        ssh -i $SSH_KEY -tt -o StrictHostKeyChecking=no ubuntu@172.31.49.97 <<EOF
+                        cd /home/ubuntu/myapp/node
+                        git pull origin main
+                        npm install
+                        pm2 restart all
+                        exit
+                        EOF
+                    '''
+                }
             }
         }
     }
