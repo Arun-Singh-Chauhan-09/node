@@ -5,11 +5,14 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clone the repository
-    git branch: 'main', url: 'https://github.com/Arun-Singh-Chauhan-09/node.git', credentialsId: 'github-creds'
+                git branch: 'main', url: 'https://github.com/Arun-Singh-Chauhan-09/node.git', credentialsId: 'github-creds'
             }
         }
         stage('Install Dependencies') {
             steps {
+                // Verify Node.js and npm are installed
+                sh 'node -v'
+                sh 'npm -v'
                 // Install dependencies
                 sh 'npm install'
             }
@@ -31,7 +34,7 @@ pipeline {
                 // SSH into the Node server and restart PM2 service
                 sshagent(['node-server-ssh-key']) {
                     sh '''
-                        ssh ubuntu@172.31.49.97 <<EOF
+                        ssh -o StrictHostKeyChecking=no ubuntu@172.31.49.97 <<EOF
                         cd /home/ubuntu/myapp/node
                         git pull origin main
                         npm install
