@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clone the repository
-                git 'https://github.com/Arun-Singh-Chauhan-09/node.git'
+    git branch: 'main', url: 'https://github.com/Arun-Singh-Chauhan-09/node.git', credentialsId: 'github-creds'
             }
         }
         stage('Install Dependencies') {
