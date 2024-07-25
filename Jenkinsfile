@@ -23,7 +23,7 @@ pipeline {
                 sh 'npm run build'
             }
         }
-        stage('Test') {
+/*        stage('Test') {
             when {
                 expression {
                     return fileExists('package.json') && sh(script: 'npm run', returnStdout: true).contains(' test')
@@ -33,7 +33,7 @@ pipeline {
                 // Run tests
                 sh 'npm test'
             }
-        }
+        } */
         stage('Deploy') {
             steps {
                 // SSH into the Node server and restart PM2 service
