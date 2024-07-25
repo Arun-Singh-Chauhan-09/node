@@ -23,23 +23,12 @@ pipeline {
                 sh 'npm run build'
             }
         }
-/*        stage('Test') {
-            when {
-                expression {
-                    return fileExists('package.json') && sh(script: 'npm run', returnStdout: true).contains(' test')
-                }
-            }
-            steps {
-                // Run tests
-                sh 'npm test'
-            }
-        }  */
         stage('Deploy') {
             steps {
                 // Run SSH commands directly
                 withCredentials([sshUserPrivateKey(credentialsId: 'node-server-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                     sh '''
-                        ssh -i $SSH_KEY -o StrictHostKeyChecking=no ubuntu@172.31.49.97 <<EOF
+                        ssh -i $SSH_KEY -tt -o StrictHostKeyChecking=no ubuntu@172.31.49.97 <<EOF
                         cd /home/ubuntu/myapp/node
                         git pull origin main
                         npm install
