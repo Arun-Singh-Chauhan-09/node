@@ -33,13 +33,13 @@ pipeline {
                 // Run tests
                 sh 'npm test'
             }
-        } */
+        }  */
         stage('Deploy') {
             steps {
-                // SSH into the Node server and restart PM2 service
-                sshagent(['node-server-ssh-key']) {
+                // Run SSH commands directly
+                withCredentials([sshUserPrivateKey(credentialsId: 'node-server-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@172.31.49.97 <<EOF
+                        ssh -i $SSH_KEY -o StrictHostKeyChecking=no ubuntu@172.31.49.97 <<EOF
                         cd /home/ubuntu/myapp/node
                         git pull origin main
                         npm install
